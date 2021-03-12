@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+.circle {
+  position: relative;
+  background-color: rgb(202, 38, 38);
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+  border: 2px solid rgb(228, 153, 13);
+  overflow: hidden;
+}
+.fill {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  width: 20rem;
+  height: 20rem;
+  bottom: "-50%";
+  border-radius: 45%;
+  border: 2px solid rgb(228, 153, 13);
+}
