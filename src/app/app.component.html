@@ -1,5 +1,18 @@
 <div class="container">
   <div class="circle">
-    <div [@x]="state" (@x.done)="onDone($event)" class="fill"></div>
+    <div
+      [@rotate]="state"
+      (@rotate.done)="onDone()"
+      [@moveUp]="{
+        value: moveup,
+        params: { time: time }
+      }"
+      class="fill"
+    ></div>
+  </div>
+  <div class="button-container">
+    <button class="btn" (click)="test()">Start</button>
+    <button class="btn">Stop</button>
+    <button class="btn">Reset</button>
   </div>
 </div>

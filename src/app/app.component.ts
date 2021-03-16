@@ -1,6 +1,5 @@
 import {
   animate,
-  keyframes,
   state,
   style,
   transition,
@@ -13,32 +12,51 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   animations: [
-    trigger('x', [
-      state('zero', style({ transform: 'translateY(-50%) rotate(0deg)' })),
+    trigger('rotate', [
+      state('zero', style({ transform: 'rotate(0deg)' })),
       state(
         'complete',
         style({
-          transform: 'translateY(-50%) rotate(500deg)',
+          transform: 'rotate(460deg)',
         })
       ),
-      transition('* <=> *', [animate('5s')]),
+      transition('zero <=> complete', [animate('10s')]),
+    ]),
+    trigger('moveUp', [
+      state('initial', style({ bottom: '0%' })),
+      state('final', style({ bottom: '100%' })),
+      transition('initial <=> final', [animate('{{time}}s')], {
+        params: { time: 2 },
+      }),
     ]),
   ],
 })
 export class AppComponent {
   title = 'pomodoro-timer';
-  isOpen = true;
   state;
-  toggleOpen() {
-    this.isOpen = !this.isOpen;
-  }
-  onDone($event) {
-    console.log($event);
+  moveup = 'initial';
+  percentage = 0;
+  endtime = new Date();
+  // time in senconds
+  time = 5;
+  onDone() {
     this.state = this.state === 'zero' ? 'complete' : 'zero';
   }
-  startTimer() {
-    for (let i = 0; i < 100; i + 25) {
-      console.log(i);
-    }
+  test() {
+    this.moveup = this.moveup === 'initial' ? 'final' : 'initial';
+    this.percentage = 100;
+  }
+  addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes * 60000);
+  }
+  getTimeRemaining(endtime) {
+    const total =
+      Date.parse(endtime.toString()) - Date.parse(new Date().toString());
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((seconds / 60) % 60);
+    const hours = Math.floor((minutes / 60) % 60);
+    const days = Math.floor((hours / 24) % 24);
+
+    return { total, seconds, minutes, hours, days };
   }
 }

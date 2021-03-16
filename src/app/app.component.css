@@ -1,25 +1,40 @@
 .container {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
+  background-color: #242424;
+}
+.button-container{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+width: 20rem;
+}
+.btn{
+  padding: 0.5rem 1.5rem;
+  border-radius: 40% 0%;
+
+  border: none;
+  outline: none;
 }
 .circle {
   position: relative;
-  background-color: rgb(202, 38, 38);
+  background-color: #8739F9;
   width: 20rem;
   height: 20rem;
   border-radius: 50%;
-  border: 2px solid rgb(228, 153, 13);
+  /* border: 2px solid rgb(228, 153, 13); */
   overflow: hidden;
 }
 .fill {
   position: absolute;
-  background-color: rgb(255, 255, 255);
-  width: 20rem;
-  height: 20rem;
-  bottom: "-50%";
+  background-color: #100f10;
+  width: 40rem;
+  height: 40rem;
+  left: -50%;
   border-radius: 45%;
-  border: 2px solid rgb(228, 153, 13);
+  /* border: 2px solid rgb(228, 153, 13); */
 }
