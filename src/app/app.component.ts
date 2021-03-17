@@ -36,27 +36,49 @@ export class AppComponent {
   state;
   moveup = 'initial';
   percentage = 0;
-  endtime = new Date();
+
+  isTimerStopped: boolean = true;
   // time in senconds
-  time = 5;
+  time = 0;
+  seconds = 0;
+  minutes = 1;
   onDone() {
     this.state = this.state === 'zero' ? 'complete' : 'zero';
   }
-  test() {
+  animateFillCircle() {
     this.moveup = this.moveup === 'initial' ? 'final' : 'initial';
     this.percentage = 100;
   }
-  addMinutes(date, minutes) {
-    return new Date(date.getTime() + minutes * 60000);
-  }
-  getTimeRemaining(endtime) {
-    const total =
-      Date.parse(endtime.toString()) - Date.parse(new Date().toString());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((seconds / 60) % 60);
-    const hours = Math.floor((minutes / 60) % 60);
-    const days = Math.floor((hours / 24) % 24);
 
-    return { total, seconds, minutes, hours, days };
+  startTimer() {
+    if (this.isTimerStopped == true) {
+      this.isTimerStopped = false;
+      this.newTimer();
+    }
+  }
+  stopTimer() {
+    if (this.isTimerStopped == false) {
+      this.isTimerStopped = true;
+    }
+  }
+  resetTimer() {
+    this.stopTimer();
+    this.minutes = 1;
+    this.seconds = 0;
+  }
+  newTimer() {
+    if (this.isTimerStopped === false) {
+      const timeinterval = setInterval(() => {
+        if (this.minutes <= -1 || this.isTimerStopped === true) {
+          clearInterval(timeinterval);
+        }
+        if (this.seconds == 0) {
+          this.seconds = 60;
+          this.minutes = this.minutes - 1;
+        }
+        this.seconds = this.seconds - 1;
+        console.log(this.seconds);
+      }, 1000);
+    }
   }
 }

@@ -10,9 +10,12 @@
       class="fill"
     ></div>
   </div>
+  <div style="color: red">
+    {{ ("0" + minutes).slice(-2) }}:{{ ("0" + seconds).slice(-2) }}
+  </div>
   <div class="button-container">
-    <button class="btn" (click)="test()">Start</button>
-    <button class="btn">Stop</button>
-    <button class="btn">Reset</button>
+    <button class="btn" (click)="startTimer()">Start</button>
+    <button class="btn" (click)="stopTimer()">Stop</button>
+    <button class="btn" (click)="resetTimer()">Reset</button>
   </div>
 </div>
