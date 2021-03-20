@@ -23,9 +23,13 @@ import { Component } from '@angular/core';
       transition('zero <=> complete', [animate('10s')]),
     ]),
     trigger('moveUp', [
-      state('initial', style({ bottom: '0%' })),
-      state('final', style({ bottom: '100%' })),
-      transition('initial <=> final', [animate('{{time}}s')], {
+      state('initial', style({ bottom: '{{percentage}}%' }), {
+        params: { percentage: 0 },
+      }),
+      state('final', style({ bottom: '{{percentage}}%' }), {
+        params: { percentage: 0 },
+      }),
+      transition('initial <=> final', [animate('1s')], {
         params: { time: 2 },
       }),
     ]),
@@ -33,7 +37,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pomodoro-timer';
-  state;
+  state = 'initial';
   moveup = 'initial';
   percentage = 0;
 
@@ -47,7 +51,6 @@ export class AppComponent {
   }
   animateFillCircle() {
     this.moveup = this.moveup === 'initial' ? 'final' : 'initial';
-    this.percentage = 100;
   }
 
   startTimer() {
@@ -65,18 +68,27 @@ export class AppComponent {
     this.stopTimer();
     this.minutes = 1;
     this.seconds = 0;
+    this.percentage = 0;
+    this.animateFillCircle();
   }
   newTimer() {
     if (this.isTimerStopped === false) {
       const timeinterval = setInterval(() => {
-        if (this.minutes <= -1 || this.isTimerStopped === true) {
-          clearInterval(timeinterval);
-        }
         if (this.seconds == 0) {
           this.seconds = 60;
           this.minutes = this.minutes - 1;
         }
         this.seconds = this.seconds - 1;
+
+        this.percentage =
+          100 - Math.floor(((this.minutes + this.seconds) / (1 * 60)) * 100);
+        this.animateFillCircle();
+        if (
+          (this.minutes <= 0 && this.seconds <= 0) ||
+          this.isTimerStopped === true
+        ) {
+          clearInterval(timeinterval);
+        }
         console.log(this.seconds);
       }, 1000);
     }

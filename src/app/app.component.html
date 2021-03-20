@@ -1,16 +1,26 @@
-<div class="container">
-  <div class="circle">
-    <div
-      [@rotate]="state"
-      (@rotate.done)="onDone()"
-      [@moveUp]="{
-        value: moveup,
-        params: { time: time }
-      }"
-      class="fill"
-    ></div>
+<div class="container full-width full-height">
+  <!-- Button group -->
+  <div class="h-container" style="margin-right: 0.5rem">
+    <button class="btn2">Short Break</button>
+    <button class="btn2">Short Break</button>
+    <button class="btn2">Short Break</button>
   </div>
-  <div style="color: red">
+  <!-- Circle -->
+  <div>
+    <div class="circle">
+      <div
+        [@rotate]="state"
+        (@rotate.done)="onDone()"
+        [@moveUp]="{
+          value: moveup,
+          params: { percentage: percentage, time: time }
+        }"
+        class="fill"
+      ></div>
+    </div>
+  </div>
+
+  <div class="timer-text">
     {{ ("0" + minutes).slice(-2) }}:{{ ("0" + seconds).slice(-2) }}
   </div>
   <div class="button-container">
