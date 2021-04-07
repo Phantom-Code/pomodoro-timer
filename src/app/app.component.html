@@ -1,9 +1,9 @@
 <div class="container full-width full-height">
   <!-- Button group -->
   <div class="h-container" style="margin-right: 0.5rem">
-    <button class="btn2">Short Break</button>
-    <button class="btn2">Short Break</button>
-    <button class="btn2">Short Break</button>
+    <button class="btn2" (click)="pomodoroHandler()">Pomodoro</button>
+    <button class="btn2" (click)="shortBreakHandler()">Short Break</button>
+    <button class="btn2" (click)="longBreakHandler()">Long Break</button>
   </div>
   <!-- Circle -->
   <div>
@@ -13,7 +13,7 @@
         (@rotate.done)="onDone()"
         [@moveUp]="{
           value: moveup,
-          params: { percentage: percentage, time: time }
+          params: { percentage: percentage }
         }"
         class="fill"
       ></div>
@@ -21,7 +21,13 @@
   </div>
 
   <div class="timer-text">
-    {{ ("0" + minutes).slice(-2) }}:{{ ("0" + seconds).slice(-2) }}
+    <div class="inline" [@flipMinute]="animateMinute">
+      {{ ("0" + minutes).slice(-2) }}
+    </div>
+    <div class="inline">:</div>
+    <div class="inline" [@flip]="flipState">
+      {{ ("0" + seconds).slice(-2) }}
+    </div>
   </div>
   <div class="button-container">
     <button class="btn" (click)="startTimer()">Start</button>

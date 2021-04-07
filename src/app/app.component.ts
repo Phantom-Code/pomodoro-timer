@@ -1,56 +1,35 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { animations } from './animations';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  animations: [
-    trigger('rotate', [
-      state('zero', style({ transform: 'rotate(0deg)' })),
-      state(
-        'complete',
-        style({
-          transform: 'rotate(460deg)',
-        })
-      ),
-      transition('zero <=> complete', [animate('10s')]),
-    ]),
-    trigger('moveUp', [
-      state('initial', style({ bottom: '{{percentage}}%' }), {
-        params: { percentage: 0 },
-      }),
-      state('final', style({ bottom: '{{percentage}}%' }), {
-        params: { percentage: 0 },
-      }),
-      transition('initial <=> final', [animate('1s')], {
-        params: { time: 2 },
-      }),
-    ]),
-  ],
+  animations: animations,
 })
 export class AppComponent {
   title = 'pomodoro-timer';
-  state = 'initial';
+  state = 'zero';
   moveup = 'initial';
+  flipState = 'start';
   percentage = 0;
-
+  initialTime = 25;
   isTimerStopped: boolean = true;
-  // time in senconds
-  time = 0;
+  timeinterval;
   seconds = 0;
-  minutes = 1;
+  minutes = 25;
+  animateMinute = false;
+
+  //circle water-fill animation
   onDone() {
     this.state = this.state === 'zero' ? 'complete' : 'zero';
   }
+  //circle moveup according to percentage animation
   animateFillCircle() {
     this.moveup = this.moveup === 'initial' ? 'final' : 'initial';
+  }
+  animateTimerText() {
+    this.flipState = this.flipState === 'start' ? 'end' : 'start';
   }
 
   startTimer() {
@@ -61,36 +40,65 @@ export class AppComponent {
   }
   stopTimer() {
     if (this.isTimerStopped == false) {
+      clearInterval(this.timeinterval);
       this.isTimerStopped = true;
     }
   }
   resetTimer() {
     this.stopTimer();
-    this.minutes = 1;
+    this.minutes = this.initialTime;
     this.seconds = 0;
     this.percentage = 0;
     this.animateFillCircle();
   }
+  playNotification() {
+    let audio = new Audio('./assets/pristine.mp3');
+    audio.play();
+  }
   newTimer() {
     if (this.isTimerStopped === false) {
-      const timeinterval = setInterval(() => {
+      this.timeinterval = setInterval(() => {
         if (this.seconds == 0) {
           this.seconds = 60;
           this.minutes = this.minutes - 1;
+          this.animateMinute = !this.animateMinute;
         }
         this.seconds = this.seconds - 1;
-
+        this.animateTimerText();
         this.percentage =
-          100 - Math.floor(((this.minutes + this.seconds) / (1 * 60)) * 100);
+          100 -
+          Math.floor(
+            ((this.minutes * 60 + this.seconds) / (this.initialTime * 60)) * 100
+          );
+
         this.animateFillCircle();
         if (
           (this.minutes <= 0 && this.seconds <= 0) ||
           this.isTimerStopped === true
         ) {
-          clearInterval(timeinterval);
+          clearInterval(this.timeinterval);
+          console.log('stopped');
+          this.playNotification();
         }
-        console.log(this.seconds);
       }, 1000);
     }
+  }
+  shortBreakHandler() {
+    this.resetTimer();
+    this.minutes = 5;
+    this.initialTime = 5;
+    this.startTimer();
+  }
+  longBreakHandler() {
+    this.resetTimer();
+    this.minutes = 10;
+    this.initialTime = 10;
+    this.startTimer();
+  }
+  pomodoroHandler() {
+    this.resetTimer();
+    this.minutes = 25;
+    this.initialTime = 25;
+    this.startTimer();
   }
 }
